@@ -1,20 +1,36 @@
 import * as React from 'react';
 import './App.css';
+import InsertBar from './InsertBar';
+import ListTodo from './ListTodo';
+import { Card } from 'material-ui';
 
-const logo = require('./logo.svg');
+interface State {
+  todos: string[];
+}
 
-class App extends React.Component {
+class App extends React.Component<{}, State> {
+  constructor(props: {}) {
+    super(props);
+    let todos: string[] = [];
+    this.state = {
+      todos: todos
+    };
+
+    this.handleAddTodo = this.handleAddTodo.bind(this);
+  }
+  handleAddTodo(text: string) {
+    this.setState({
+      todos: [text, ...this.state.todos]
+    });
+
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      <Card>
+        <InsertBar onAddTodo={this.handleAddTodo} />
+        <ListTodo todos={this.state.todos} />
+      </Card>
     );
   }
 }
