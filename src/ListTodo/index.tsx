@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { ListItem, Checkbox, ListItemText, ListItemSecondaryAction, IconButton, List } from 'material-ui';
-import EditIcon from 'material-ui-icons/Edit';
+import DeleteIcon from 'material-ui-icons/Delete';
+import { Todo } from '../App';
 
 interface Props {
-    todos: string[];
+    todos: Todo[];
+    onToggleTodo: (todo: Todo) => void;
+    onDeleteTodo: (todo: Todo) => void;
 }
 
 export default class ListTodo extends React.Component<Props> {
@@ -11,19 +14,20 @@ export default class ListTodo extends React.Component<Props> {
         super(props);
     }
     render() {
-        let items = this.props.todos.map((todo, i) => {
-            return (
-                <ListItem key={i}>
-                    <Checkbox />
-                    <ListItemText primary={todo} />
-                    <ListItemSecondaryAction>
-                        <IconButton aria-label="Comments">
-                            <EditIcon />
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-            );
-        });
+        let items = this.props.todos.filter(todo => !todo.isDeleted)
+            .map((todo, i) => {
+                return (
+                    <ListItem key={i}>
+                        <Checkbox onChange={() => this.props.onToggleTodo(todo)} />
+                        <ListItemText primary={todo.text} />
+                        <ListItemSecondaryAction>
+                            <IconButton aria-label="Delete" onClick={() => this.props.onDeleteTodo(todo)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                );
+            });
         return (
             <List>
                 {items}
